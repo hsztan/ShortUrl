@@ -3,8 +3,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
+ruby `cat .ruby-version`.strip
 
+# https://github.com/fnando/browser
 gem 'browser'
 gem 'rubocop'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -36,12 +37,13 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.1', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 3.7'
+  gem 'factory_bot_rails'
 end
 
 group :development do
