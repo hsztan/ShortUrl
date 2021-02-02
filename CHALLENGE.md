@@ -1,66 +1,98 @@
+![FullStack Labs](app/assets/images/FSL-logo-portrait.png)
+
 # Summary
-For this code challenge a Candidate will clone and setup an existing Rails application. The rails app will contain routes, migrations, models, controllers and some mockup views but with no actual funcionality created. The candidate will show all his/her expertise building apps with the Rails framework and problem solving skills.
+For this code challenge a Candidate will clone and setup an existing Rails
+application.  The application will contain routes, migrations, models, and
+minimal views but with no actual functionality created. The candidate will show
+all her/his expertise building apps with the Ruby on Rails framework and problem
+solving skills.
 
 # Overview
-Hey URL! is a service to create awesome friendly URLs to make it easier for people to remember. Our Team developed some mockup views but we don’t have our awesome functionality yet.
+HeyURL! is a service to create awesome friendly URLs to make it easier for
+people to remember. Our team developed some mock views but they lack our awesome
+functionality.
 
-# REQUIREMENTS
-* Implement actions to create shorter urls based on full url params
-* If URL is not valid the application returns an error message to the user
-* We want to give to our users a way to metric their URLs. Every time that someone clicks their URL, it should record that click and also user platform and browser using user agent request header (Browser gem).
-* We want to create a metrics panel for the user to view the stats for every short url. The user should be able to see total clicks per day on the current month. What browsers and platforms.
-* Implement API endpoint to get 10 latest urls
-* If someone try to visit a invalid short url then it should return a custom 404 page
-* Controllers, endpoints and models should be fully tested with rspec
+# Requirements
+1. Implement actions to create a short URL based on a given full URL
+1. If URL is not valid, the application returns an error message to the user
+1. We want to be able to provide basic click metrics to our users for each URL they generate.
+   1. Every time that someone clicks a short URL, it should record that click
+   1. the record should include the user platform and browser detected from the user agent
+1. We want to create a metrics panel for the user to view the stats for every short URL.
+   1. The user should be able to see total clicks per day on the current month
+   1. An additional chart with a breakdown of browsers and platforms
+1. If someone tries to visit a invalid short URL then it should return a 404 page
+1. Controllers, endpoints and models should be fully tested with RSpec
 
-# URL format
-* Max length 5 character e.g.  NELNT
-* Allows Uppercase and Lowercase characters
-* Allows Number
-* Any non-word character is not allowed e.g whitespaces, tab,% ,$.* etc
-* URL must be unique
-* Original URL format should be validated 
-* `short_url` attribute should store only the generated code
+# Spec for generating short URLs
+- It MUST have 5 characters in length e.g. NELNT
+- It MUST generate only upper case letters
+- It MUST NOT generate special characters
+- It MUST NOT generate whitespace
+- It MUST be unique
+- `short_url` attribute should store only the generated code
+
+# Recommendations
+
+1. Check routes defined in [`config/routes.rb`](./config/routes.rb)
+1. Check controller actions in [`app/controllers/urls_controller.rb`](./app/controllers/urls_controller.rb)
+1. Check views in [`app/views/urls/`](./app/views/urls)
+1. Check existing tests in the [`spec` folder](./spec)
+1. Google Charts is already added to display charts but you can use any library
+1. Use the [`browser` gem](https://github.com/fnando/browser) already installed
+   to extract information about each click tracked
 
 # Pages
-These mockup pages are already built into our site:
+The following pages/urls are already built into our app:
 
-GET / : Contains url form and the 10 latest url list with their click counter
+1. `GET /`: Contains the form and a list of the last 10 URL created with their
+   click count
+1. `GET /:url`: Redirects from a short URL to the original URL and should also
+   track the click event
+1. `GET /urls/:url`: Shows the metrics associated to the short URL
 
-GET /:url: Saves URL information (click counter and referrer) and redirects to original url
-
-GET /:url/stats: Shows metrics information about the given url
-
-API (Bonus)
-Also, we need to create a way to get the 10 latest urls from an API endpoint. it should be JSON API complaint. Here is an example of a response from the API:
+# API - Optional Bonus Points
+We would like to have a way to retrieve the last 10 URLs created using an API
+endpoint. It should be JSON-API complaint. Here is an example of a response from
+the API:
 
 ```
 {
-  "data": [{
-    "type": "urls",
-    "id": "1",
-    "attributes": {
-      "created-at": "2018-08-15T02:48:08.642Z",
-  "original-url": "www.fullstacklabs.co/angular-developers",
-  "url": "https://domain/fss1",
-  "clicks": 2
-    },
-    "relationships": {
-      "metrics": {
-        "data": [
-          {
-            "id": 1,
-            "type": "metrics"
-          }
-        ]
+  "data": [
+    {
+      "type": "urls",
+      "id": "1",
+      "attributes": {
+        "created-at": "2018-08-15T02:48:08.642Z",
+        "original-url": "www.fullstacklabs.co/angular-developers",
+        "url": "https://domain/fss1",
+        "clicks": 2
+      },
+      "relationships": {
+        "clicks": {
+          "data": [
+            {
+              "id": 1,
+              "type": "clicks"
+            }
+          ]
+        }
       }
     }
-  }],
-  "included": []
+  ],
+  "included": [
+    {
+      "type": "clicks",
+      "id": 1,
+      "attributes": {
+        ...
+      }
+    }
+  ]
 }
 ```
 
-Accomplishment
-Completed functionality 70%
-Completed test 20 %
-Completed bonus 10%
+# Accomplishment
+- Completed functionality 65%
+- Completed test 20%
+- Completed bonus 15%

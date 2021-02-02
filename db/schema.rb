@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20_180_816_185_151) do
     t.string 'short_url', null: false
     t.string 'original_url', null: false
     t.integer 'clicks_count', default: 0
+    t.index ['short_url'], name: 'index_urls_on_short_url', unique: true
   end
 
   add_foreign_key 'clicks', 'urls'

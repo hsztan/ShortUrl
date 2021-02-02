@@ -7,6 +7,7 @@ class CreateUrls < ActiveRecord::Migration[5.2]
       t.string :short_url, null: false
       t.string :original_url, null: false
       t.integer :clicks_count, default: 0
+      t.index :short_url, unique: true
     end
   end
 end
