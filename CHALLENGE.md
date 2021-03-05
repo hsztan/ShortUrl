@@ -1,5 +1,10 @@
 ![FullStack Labs](app/assets/images/FSL-logo-portrait.png)
 
+# Before You Start
+
+Please follow the [`Getting Started` section on README](./README.md) to set up
+your environment before starting the challenge.
+
 # Summary
 For this code challenge a Candidate will clone and setup an existing Rails
 application.  The application will contain routes, migrations, models, and
