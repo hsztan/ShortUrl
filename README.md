@@ -13,7 +13,7 @@ section before starting the challenge.
 2. Install Ruby version
 
 ```sh
-$ rvm install 2.6.6
+$ rvm install 2.7.3
 ```
 
 3. Install PostgreSQL >9.4 and start it
