@@ -3,21 +3,32 @@
 class UrlsController < ApplicationController
   def index
     # recent 10 short urls
-    @url = Url.new
-    @urls = [
-      Url.new(short_url: 'ABCDE', original_url: 'http://google.com', created_at: Time.now),
-      Url.new(short_url: 'ABCDG', original_url: 'http://facebook.com', created_at: Time.now),
-      Url.new(short_url: 'ABCDF', original_url: 'http://yahoo.com', created_at: Time.now)
-    ]
+    respond_to do |f|
+      f.html do
+        @urls = Url.latest
+        @url = Url.new
+      end
+      f.json { render json: Url.latest.to_json(include: :clicks) }
+    end
+    # @url = Url.new
+    # @urls = Url.latest
   end
 
   def create
-    raise 'add some code'
-    # create a new URL record
+    @url = Url.new(url_params)
+    @url.short_url = Url.create_short_url
+    if @url.save
+      @click = Click.new(url_id: @url.id, browser: browser.name, platform: browser.platform, created_at: Time.now)
+      @click.save
+      @url.clicks << @click
+    end
+    flash[:notice] = @url.errors.full_messages.join(', ') unless @url.errors.empty?
+    redirect_to urls_path
   end
 
   def show
-    @url = Url.new(short_url: 'ABCDE', original_url: 'http://google.com', created_at: Time.now)
+    @url = Url.find(params[:url])
+    redirect_to urls_path unless @url.present?
     # implement queries
     @daily_clicks = [
       ['1', 13],
@@ -48,5 +59,11 @@ class UrlsController < ApplicationController
   def visit
     # params[:short_url]
     render plain: 'redirecting to url...'
+  end
+
+  private
+
+  def url_params
+    params.require(:url).permit(:original_url)
   end
 end
