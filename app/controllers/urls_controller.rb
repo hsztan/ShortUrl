@@ -17,11 +17,7 @@ class UrlsController < ApplicationController
   def create
     @url = Url.new(url_params)
     @url.short_url = Url.create_short_url
-    if @url.save
-      @click = Click.new(url_id: @url.id, browser: browser.name, platform: browser.platform, created_at: Time.now)
-      @click.save
-      @url.clicks << @click
-    end
+    flash[:notice] = 'Short URL created!' if @url.save
     flash[:notice] = @url.errors.full_messages.join(', ') unless @url.errors.empty?
     redirect_to urls_path
   end
@@ -29,6 +25,12 @@ class UrlsController < ApplicationController
   def show
     @url = Url.find(params[:url])
     redirect_to urls_path unless @url.present?
+    @click = Click.new(url: @url, browser: browser.name, platform: browser.platform)
+    unless @click.save
+      flash[:notice] = @click.errors.full_messages.join(', ')
+      redirect_to urls_path
+    end
+    @url.clicks_count += 1
     # implement queries
     @daily_clicks = [
       ['1', 13],
