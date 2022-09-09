@@ -31,6 +31,7 @@ class UrlsController < ApplicationController
       redirect_to urls_path
     end
     @url.clicks_count += 1
+    @url.update(clicks_count: @url.clicks_count)
     # implement queries
     @daily_clicks = [
       ['1', 13],
