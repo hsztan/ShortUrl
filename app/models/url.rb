@@ -20,7 +20,10 @@ class Url < ApplicationRecord
   end
 
   def daily_clicks
-    clicks.map { |c| [c.created_at.strftime('%Y-%m-%d'), 1] }.group_by(&:first).map { |k, v| [k, v.count] }
+    last_10_days = (0..9).map { |i| Date.today - i.days }
+    dates = (1..10).to_a
+    day_clicks = clicks.group_by_day(:created_at).count.values_at(*last_10_days).map { |v| v || 0 }.reverse
+    day_clicks.zip(dates).map { |k, v| [v, k] }
   end
 
   private
