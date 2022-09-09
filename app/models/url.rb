@@ -11,6 +11,18 @@ class Url < ApplicationRecord
     (1..5).map { rand(65..90).chr }.join.upcase
   end
 
+  def browsers_clicks
+    clicks.group(:browser).count.map { |k, v| [k, v] }
+  end
+
+  def platforms_clicks
+    clicks.group(:platform).count.map { |k, v| [k, v] }
+  end
+
+  def daily_clicks
+    clicks.map { |c| [c.created_at.strftime('%Y-%m-%d'), 1] }.group_by(&:first).map { |k, v| [k, v.count] }
+  end
+
   private
 
   def url_valid?
