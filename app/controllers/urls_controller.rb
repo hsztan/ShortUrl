@@ -41,8 +41,8 @@ class UrlsController < ApplicationController
   end
 
   def visit
-    # params[:short_url]
-    render plain: 'redirecting to url...'
+    @url = Url.find_by(short_url: params[:short_url])
+    redirect_to @url.original_url
   end
 
   private
