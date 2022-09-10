@@ -23,26 +23,40 @@ class UrlsController < ApplicationController
   end
 
   def show
-    @url = Url.find(params[:url])
-    redirect_to urls_path unless @url.present?
-    @click = Click.new(url: @url, browser: browser.name, platform: browser.platform)
-    unless @click.save
-      flash[:notice] = @click.errors.full_messages.join(', ')
-      redirect_to urls_path
+    if params[:short_url] != 'NOTFOUND'
+      render_404
+    else
+      @url = Url.find(params[:url])
+      @click = Click.new(url: @url, browser: browser.name, platform: browser.platform)
+      unless @click.save
+        render_404
+      end
+      @url.clicks_count += 1
+      @url.update(clicks_count: @url.clicks_count)
+      # implement queries
+      @daily_clicks = @url.daily_clicks
+      # create tuple of browser and clicks
+      @browsers_clicks = @url.browsers_clicks
+      # create tuple of platform and clicks
+      @platform_clicks = @url.platforms_clicks
     end
-    @url.clicks_count += 1
-    @url.update(clicks_count: @url.clicks_count)
-    # implement queries
-    @daily_clicks = @url.daily_clicks
-    # create tuple of browser and clicks
-    @browsers_clicks = @url.browsers_clicks
-    # create tuple of platform and clicks
-    @platform_clicks = @url.platforms_clicks
+  end
+
+  def render_404
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      format.xml  { head :not_found }
+      format.any  { head :not_found }
+    end
   end
 
   def visit
     @url = Url.find_by(short_url: params[:short_url])
-    redirect_to @url.original_url
+    if @url.present?
+      redirect_to @url.original_url
+    else
+      redirect_to url_path('NOTFOUND')
+    end
   end
 
   private
