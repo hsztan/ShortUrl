@@ -23,9 +23,7 @@ class UrlsController < ApplicationController
   end
 
   def show
-    if params[:short_url] != 'NOTFOUND'
-      render_404
-    else
+    unless params[:url] == 'NOTFOUND'
       @url = Url.find(params[:url])
       @click = Click.new(url: @url, browser: browser.name, platform: browser.platform)
       unless @click.save
@@ -39,6 +37,8 @@ class UrlsController < ApplicationController
       @browsers_clicks = @url.browsers_clicks
       # create tuple of platform and clicks
       @platform_clicks = @url.platforms_clicks
+    else
+      render_404
     end
   end
 
