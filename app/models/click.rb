@@ -5,4 +5,6 @@ class Click < ApplicationRecord
 
   validates :browser, presence: true
   validates :platform, presence: true
+
+  include Countable
 end

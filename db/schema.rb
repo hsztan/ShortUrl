@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_234116) do
+ActiveRecord::Schema.define(version: 2022_09_12_205905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2021_05_24_234116) do
     t.bigint "url_id"
     t.string "browser", null: false
     t.string "platform", null: false
+    t.integer "counter", default: 0
     t.index ["url_id"], name: "index_clicks_on_url_id"
   end
 
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_05_24_234116) do
     t.string "short_url", null: false
     t.string "original_url", null: false
     t.integer "clicks_count", default: 0
+    t.integer "counter", default: 0
     t.index ["short_url"], name: "index_urls_on_short_url", unique: true
   end
 

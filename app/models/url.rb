@@ -7,6 +7,8 @@ class Url < ApplicationRecord
   validates :original_url, presence: true
   validate :valid_url
 
+  include Countable
+
   def self.create_short_url
     (1..5).map { rand(65..90).chr }.join.upcase
   end
