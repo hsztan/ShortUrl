@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,30 +12,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_12_205905) do
-
+ActiveRecord::Schema.define(version: 20_220_912_205_905) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "clicks", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "url_id"
-    t.string "browser", null: false
-    t.string "platform", null: false
-    t.integer "counter", default: 0
-    t.index ["url_id"], name: "index_clicks_on_url_id"
+  create_table 'clicks', force: :cascade do |t|
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.bigint 'url_id'
+    t.string 'browser', null: false
+    t.string 'platform', null: false
+    t.integer 'counter', default: 0
+    t.index ['url_id'], name: 'index_clicks_on_url_id'
   end
 
-  create_table "urls", force: :cascade do |t|
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
-    t.string "short_url", null: false
-    t.string "original_url", null: false
-    t.integer "clicks_count", default: 0
-    t.integer "counter", default: 0
-    t.index ["short_url"], name: "index_urls_on_short_url", unique: true
+  create_table 'urls', force: :cascade do |t|
+    t.datetime 'created_at', default: -> { 'now()' }, null: false
+    t.datetime 'updated_at', default: -> { 'now()' }, null: false
+    t.string 'short_url', null: false
+    t.string 'original_url', null: false
+    t.integer 'clicks_count', default: 0
+    t.integer 'counter', default: 0
+    t.index ['short_url'], name: 'index_urls_on_short_url', unique: true
   end
 
-  add_foreign_key "clicks", "urls"
+  add_foreign_key 'clicks', 'urls'
 end

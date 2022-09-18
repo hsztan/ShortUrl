@@ -22,13 +22,13 @@ class UrlsController < ApplicationController
     redirect_to urls_path
   end
 
-  def show
-    unless params[:url] == 'NOTFOUND'
+  def show # rubocop:disable Metrics/AbcSize
+    if params[:url] == 'NOTFOUND'
+      render_404
+    else
       @url = Url.find(params[:url])
       @click = Click.new(url: @url, browser: browser.name, platform: browser.platform)
-      unless @click.save
-        render_404
-      end
+      render_404 unless @click.save
       @url.clicks_count += 1
       @url.update(clicks_count: @url.clicks_count)
       # implement queries
@@ -37,14 +37,12 @@ class UrlsController < ApplicationController
       @browsers_clicks = @url.browsers_clicks
       # create tuple of platform and clicks
       @platform_clicks = @url.platforms_clicks
-    else
-      render_404
     end
   end
 
-  def render_404
+  def render_404 # rubocop:disable naming/VariableNumber
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+      format.html { render file: "#{Rails.root}/public/404", layout: false, status: :not_found }
       format.xml  { head :not_found }
       format.any  { head :not_found }
     end
